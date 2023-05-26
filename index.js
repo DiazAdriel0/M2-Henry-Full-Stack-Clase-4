@@ -1,10 +1,12 @@
 let mostrarAmigos = (data) => {
-    let ul = document.getElementById("lista")
-    ul.innerHTML = ""
+    //let ul = document.getElementById("lista")
+    //ul.innerHTML = ""
+    let ul = $("#lista")
+    ul.empty()
     for (let i = 0; i < data.length; i++) {
         let li = document.createElement("li")
-        li.innerHTML = `Amigo: ${data[i].name}`
-        $("#lista").append(li)
+        li.innerText = `Amigo: ${data[i].name}`
+        ul.append(li)
     };
 }
 
@@ -13,18 +15,21 @@ $("#boton").on("click", function(){
 })
 
 $("#search").on("click", function(){
-    let input = document.getElementById("input")
-    let inputValue = input.value
-    let span = document.getElementById("amigo")
+    //let input = document.getElementById("input")
+    //let inputValue = input.value
+    let inputValue = $("#input").val()
+    //let span = document.getElementById("amigo")
+    input.value = ""
     if(inputValue > 0 && inputValue <= 6){
         $.get(`http://localhost:5000/amigos/${inputValue}`, function(data){
-            span.innerHTML = `El id buscado corresponde a: ${data.name}`
+            $("#amigo").html(`El id buscado corresponde a: ${data.name}`)
+            //span.innerText = `El id buscado corresponde a: ${data.name}`
 
         })
     }else{
-        span.innerHTML = "No existe un amigo con ese id"
+        //span.innerHTML = "No existe un amigo con ese id" 
+        $("#amigo").html("No existe un amigo con ese id")
     }
-    input.value = ""
 })
 
 let amigoEliminado = data => {
@@ -38,6 +43,7 @@ let amigoEliminado = data => {
 $("#delete").on("click", function(){
     let inputDel = document.getElementById("inputDelete")
     let inputValue = inputDel.value
+    inputDel.value = ""
     
     $.get(`http://localhost:5000/amigos/${inputValue}`, amigoEliminado)
     $.ajax({
@@ -45,5 +51,4 @@ $("#delete").on("click", function(){
         url: `http://localhost:5000/amigos/${inputValue}`,
         success: (response) => mostrarAmigos(response),
     });
-    inputDel.value = ""
 })
